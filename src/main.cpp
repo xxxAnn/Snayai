@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
+#include "../headers/const.hpp"
 
 int main() {
     sf::RenderWindow window(
-        sf::VideoMode(640, 480), 
-        "Hello World"
+        sf::VideoMode(snayai::constants::WINDOW_WIDTH, snayai::constants::WINDOW_HEIGHT), 
+        snayai::constants::WINDOW_NAME
     );
 
     while (window.isOpen()) {
