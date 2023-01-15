@@ -13,7 +13,7 @@ int snayai::grid::Grid::getTile(int i, int j) {
     return matrix[i][j];
 }
 
-//! Gets the sf::Color from a tile.
+//! Gets the sf::Color for a tile.
 sf::Color snayai::grid::Grid::getTileColor(int i, int j) {
     std::map<int, sf::Color> colorMap;
     snayai::utils::PopulateColorMap(colorMap);
