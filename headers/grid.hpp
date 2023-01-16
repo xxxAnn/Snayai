@@ -12,6 +12,8 @@ namespace snayai {
             public:
                 Grid();
                 int getTile(int i, int j);
+                int setTile(int i, int j, int value);
+                void reset();
                 sf::Color getTileColor(int i, int j);
         };
     }
