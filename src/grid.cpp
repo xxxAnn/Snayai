@@ -27,7 +27,7 @@ void snayai::grid::Grid::reset() {
 
 void snayai::grid::Grid::addNewFood() {
     auto newFood = snayai::utils::randomPair(width-1, height-1);
-    std::cout << "Spawning food at (" << newFood.first << ", " << newFood.second << ")" << '\n';
+    //std::cout << "Spawning food at (" << newFood.first << ", " << newFood.second << ")" << '\n';
     foods.push_back(newFood);
 }
 

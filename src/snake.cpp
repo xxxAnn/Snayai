@@ -15,7 +15,7 @@ bool snayai::snake::Snake::move(int width, int height) {
     int newHeadPositionX = back.first + direction[0];
     int newHeadPositionY = back.second + direction[1];
     if (isDeath(newHeadPositionX, newHeadPositionY, width, height)) {
-        std::cout << "You died." << '\n';
+        //std::cout << "You died." << '\n';
         return true;
     } else {
         blocks.push_back({newHeadPositionX, newHeadPositionY});
