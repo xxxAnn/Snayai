@@ -38,7 +38,7 @@ int main() {
         if (myGrid.tick(mySnake)) {
             std::ofstream myFile;
 
-            myFile.open("test.txt", std::ios_base::app);
+            myFile.open("training_data.txt", std::ios_base::app);
 
             std::vector<int> v = snayai::ai::generateTrainingData(myGrid, mySnake);
 
@@ -51,6 +51,7 @@ int main() {
             myFile.close();
 
             // generate a random input
+            /*
             int myRandomInput = rand() % static_cast<int>(4);
 
             if (myRandomInput == 0) {
@@ -65,6 +66,7 @@ int main() {
             if (myRandomInput == 3) {
                 mySnake.setDirection(0, 1);
             }
+            */
 
             if (myGrid.ended) {
                 myGrid = snayai::grid::Grid();
