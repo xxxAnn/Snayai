@@ -9,21 +9,48 @@ snayai::snake::Snake::Snake(int x, int y) {
     direction[1] = 0;
 }
 
-void snayai::snake::Snake::move() {
-    int end[2];
+bool snayai::snake::Snake::move(int width, int height) {
     std::pair<int, int> back;
     back = blocks.back();
-    blocks.push_back({back.first + direction[0], back.second + direction[1]});
-    blocks.erase(blocks.begin());
-}
-
-void snayai::snake::Snake::updateGrid(snayai::grid::Grid &grid) {
-    for (auto block : blocks) {
-        grid.setTile(block.first, block.second, snake_color);
+    int newHeadPositionX = back.first + direction[0];
+    int newHeadPositionY = back.second + direction[1];
+    if (newHeadPositionX >= width-1 || newHeadPositionX < 0 || newHeadPositionY >= height-1 || newHeadPositionY < 0 || collidesSelf(newHeadPositionX, newHeadPositionY)) {
+        std::cout << "You died." << std::endl;
+        return true;
+    } else {
+        blocks.push_back({newHeadPositionX, newHeadPositionY});
+        blocks.erase(blocks.begin());
+        return false;
     }
 }
 
+std::pair<int, int> snayai::snake::Snake::getHeadPosition() {
+    return blocks.back();
+}
+
+bool snayai::snake::Snake::collidesSelf(int newX, int newY) {
+    for (int i = 1; i < blocks.size(); i++) {
+        std::pair<int, int> block;
+        block = blocks[i];
+        if (block.first == newX && block.second == newY) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void snayai::snake::Snake::addNewBlock() {
+    std::pair<int, int> back;
+    back = blocks.back();
+    int newHeadPositionX = back.first + direction[0];
+    int newHeadPositionY = back.second + direction[1];
+
+    blocks.push_back({newHeadPositionX, newHeadPositionY});
+}
+ 
 void snayai::snake::Snake::setDirection(int x, int y) {
-    direction[0] = x;
-    direction[1] = y;
+    if ((direction[0] != -x && direction[1] == 0) || (direction[1] != -y && direction[0] == 0)) {
+        direction[0] = x;
+        direction[1] = y;
+    }
 }

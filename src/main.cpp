@@ -8,14 +8,8 @@ int main() {
 
     snayai::grid::Grid myGrid;
     snayai::snake::Snake mySnake(1, 1);
-    
-    clock_t now = clock();
 
-    float delay = 1/(snayai::constants::SNAKE_SPEED);
-
-    delay *= CLOCKS_PER_SEC;
-
-    mySnake.updateGrid(myGrid);
+    myGrid.update(mySnake);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -41,12 +35,7 @@ int main() {
 
         window.clear(sf::Color::Black);
         
-        if (clock() - now >= delay) {
-            now = clock();
-            myGrid.reset();
-            mySnake.move();
-            mySnake.updateGrid(myGrid);
-        }
+        myGrid.tick(mySnake);
 
         /*
         The following section calculates the amount of square tiles there should be horizontally and vertically
