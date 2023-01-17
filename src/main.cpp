@@ -35,7 +35,43 @@ int main() {
 
         window.clear(sf::Color::Black);
         
-        myGrid.tick(mySnake);
+        if (myGrid.tick(mySnake)) {
+            std::ofstream myFile;
+
+            myFile.open("test.txt", std::ios_base::app);
+
+            std::vector<int> v = snayai::ai::generateTrainingData(myGrid, mySnake);
+
+            for(int i = 0; i < v.size(); i++) {
+                myFile << v[i] << ' ';
+            }
+
+            myFile << '\n';
+
+            myFile.close();
+
+            // generate a random input
+            int myRandomInput = rand() % static_cast<int>(4);
+
+            if (myRandomInput == 0) {
+                mySnake.setDirection(-1, 0);
+            }
+            if (myRandomInput == 1) {
+                mySnake.setDirection(1, 0);
+            }
+            if (myRandomInput == 2) {
+                mySnake.setDirection(0, -1);
+            }
+            if (myRandomInput == 3) {
+                mySnake.setDirection(0, 1);
+            }
+
+            if (myGrid.ended) {
+                myGrid = snayai::grid::Grid();
+                mySnake = snayai::snake::Snake(1, 1);
+                myGrid.update(mySnake);
+            }
+        }
 
         /*
         The following section calculates the amount of square tiles there should be horizontally and vertically

@@ -12,9 +12,11 @@
 #include <ctime>
 #include <random>
 #include <algorithm>
+#include <fstream>
 #include "snake.hpp"
 #include "const.hpp"
 #include "grid.hpp"
 #include "utils.hpp"
+#include "ai.hpp"
 
 namespace snayai {}

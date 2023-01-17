@@ -9,3 +9,4 @@ void snayai::utils::PopulateColorMap(std::map<int, sf::Color> &colorMap) {
 std::pair<int, int> snayai::utils::randomPair(int max_x, int max_y) {
     return std::pair<int, int>(rand() % static_cast<int>(max_x), rand() % static_cast<int>(max_y));
 }
+

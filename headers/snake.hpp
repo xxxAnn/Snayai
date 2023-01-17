@@ -14,6 +14,7 @@ namespace snayai {
                 Snake(int x, int y);
                 bool move(int width, int height);
                 bool collidesSelf(int newX, int newY);
+                bool isDeath(int newX, int newY, int width, int height);
                 void setDirection(int x, int y);
                 void addNewBlock();
         };

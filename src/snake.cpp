@@ -14,8 +14,8 @@ bool snayai::snake::Snake::move(int width, int height) {
     back = blocks.back();
     int newHeadPositionX = back.first + direction[0];
     int newHeadPositionY = back.second + direction[1];
-    if (newHeadPositionX >= width-1 || newHeadPositionX < 0 || newHeadPositionY >= height-1 || newHeadPositionY < 0 || collidesSelf(newHeadPositionX, newHeadPositionY)) {
-        std::cout << "You died." << std::endl;
+    if (isDeath(newHeadPositionX, newHeadPositionY, width, height)) {
+        std::cout << "You died." << '\n';
         return true;
     } else {
         blocks.push_back({newHeadPositionX, newHeadPositionY});
@@ -35,6 +35,13 @@ bool snayai::snake::Snake::collidesSelf(int newX, int newY) {
         if (block.first == newX && block.second == newY) {
             return true;
         }
+    }
+    return false;
+}
+
+bool snayai::snake::Snake::isDeath(int newX, int newY, int width, int height) {
+    if (newX >= width-1 || newX < 0 || newY >= height-1 || newY < 0 || collidesSelf(newX, newY)) {
+        return true;
     }
     return false;
 }

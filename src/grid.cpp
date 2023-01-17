@@ -12,6 +12,9 @@ snayai::grid::Grid::Grid() {
     delay *= CLOCKS_PER_SEC;
 
     addNewFood();
+    score = 0;
+    _ai_training_current_score = 0;
+    _ai_training_previous_score = 0;
 };
 
 void snayai::grid::Grid::reset() {
@@ -24,7 +27,7 @@ void snayai::grid::Grid::reset() {
 
 void snayai::grid::Grid::addNewFood() {
     auto newFood = snayai::utils::randomPair(width-1, height-1);
-    std::cout << "Spawning food at (" << newFood.first << ", " << newFood.second << ")" << std::endl;
+    std::cout << "Spawning food at (" << newFood.first << ", " << newFood.second << ")" << '\n';
     foods.push_back(newFood);
 }
 
@@ -44,7 +47,7 @@ sf::Color snayai::grid::Grid::getTileColor(int i, int j) {
     return colorMap[getTile(i, j)];
 }
 
-void snayai::grid::Grid::tick(snayai::snake::Snake &snake) {
+bool snayai::grid::Grid::tick(snayai::snake::Snake &snake) {
     if (clock() - now >= delay && !ended) {
         now = clock();
         reset();
@@ -53,9 +56,26 @@ void snayai::grid::Grid::tick(snayai::snake::Snake &snake) {
         if (checkCollision(snake_head)) {
             snake.addNewBlock();
             addNewFood();
+            _ai_training_previous_score = _ai_training_current_score;
+            _ai_training_current_score++;
+            score++;
+        }
+        if (ended) {
+            _ai_training_current_score = -1000;
         }
         update(snake);
+        return true;
     }
+    return false;
+}
+
+bool snayai::grid::Grid::isFood(int x, int y) {
+    for (auto food : foods) {
+        if (food.first == x && food.second == y) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool snayai::grid::Grid::checkCollision(std::pair<int, int> &head) {
