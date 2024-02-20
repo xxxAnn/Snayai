@@ -19,7 +19,7 @@ namespace snayai {
             public:
                 Grid();
                 int getTile(int i, int j);
-                int setTile(int i, int j, int value);
+                void setTile(int i, int j, int value);
                 bool checkCollision(std::pair<int, int> &head);
                 void reset();
                 void addNewFood();

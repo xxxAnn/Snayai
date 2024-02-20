@@ -1,4 +1,4 @@
-#include "../headers/snayai.hpp"
+#include "snayai.hpp"
 
 snayai::snake::Snake::Snake(int x, int y) {
     std::pair<int, int> pairToAdd(x, y);

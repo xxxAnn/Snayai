@@ -1,4 +1,4 @@
-#include "../headers/snayai.hpp"
+#include "snayai.hpp"
 
 snayai::grid::Grid::Grid() {
     for (int i = 0; i < width; i++) {
@@ -35,7 +35,7 @@ int snayai::grid::Grid::getTile(int i, int j) {
     return matrix[i][j];
 }
 
-int snayai::grid::Grid::setTile(int i, int j, int value) {
+void snayai::grid::Grid::setTile(int i, int j, int value) {
     matrix[i][j] = value;
 }
 

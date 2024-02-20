@@ -1,4 +1,4 @@
-#include "../headers/snayai.hpp"
+#include "snayai.hpp"
 
 int getTileType(snayai::grid::Grid &grid, snayai::snake::Snake &snake, int x, int y) {
     if (x < 0 || y < 0 || x >= grid.width || y >= grid.height) {

@@ -1,4 +1,4 @@
-#include "../headers/snayai.hpp"
+#include "snayai.hpp"
 
 int main() {
     sf::RenderWindow window(
