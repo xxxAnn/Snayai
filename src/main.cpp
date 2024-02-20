@@ -9,64 +9,20 @@ int main() {
     snayai::grid::Grid myGrid;
     snayai::snake::Snake mySnake(1, 1);
 
+    snayai::controller::Controller controller = snayai::controller::Player();
+
     myGrid.update(mySnake);
 
     while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Left) {
-                    mySnake.setDirection(-1, 0);
-                }
-                if (event.key.code == sf::Keyboard::Right) {
-                    mySnake.setDirection(1, 0);
-                }
-                if (event.key.code == sf::Keyboard::Up) {
-                    mySnake.setDirection(0, -1);
-                }
-                if (event.key.code == sf::Keyboard::Down) {
-                    mySnake.setDirection(0, 1);
-                }
-            }
+        
+        std::pair<int, int> direction = controller.poll(myGrid, window);
+        if (direction.first != 0 || direction.second != 0) {
+            mySnake.setDirection(direction.first, direction.second);
         }
 
         window.clear(sf::Color::Black);
-        
+
         if (myGrid.tick(mySnake)) {
-            std::ofstream myFile;
-
-            myFile.open("training_data.txt", std::ios_base::app);
-
-            std::vector<int> v = snayai::ai::generateTrainingData(myGrid, mySnake);
-
-            for(int i = 0; i < v.size(); i++) {
-                myFile << v[i] << ' ';
-            }
-
-            myFile << '\n';
-
-            myFile.close();
-
-            // generate a random input
-            /*
-            int myRandomInput = rand() % static_cast<int>(4);
-
-            if (myRandomInput == 0) {
-                mySnake.setDirection(-1, 0);
-            }
-            if (myRandomInput == 1) {
-                mySnake.setDirection(1, 0);
-            }
-            if (myRandomInput == 2) {
-                mySnake.setDirection(0, -1);
-            }
-            if (myRandomInput == 3) {
-                mySnake.setDirection(0, 1);
-            }
-            */
 
             if (myGrid.ended) {
                 myGrid = snayai::grid::Grid();

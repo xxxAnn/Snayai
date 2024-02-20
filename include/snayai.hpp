@@ -16,7 +16,7 @@
 #include "snake.hpp"
 #include "const.hpp"
 #include "grid.hpp"
+#include "controller.hpp"
 #include "utils.hpp"
-#include "ai.hpp"
 
 namespace snayai {}

@@ -26,9 +26,8 @@ namespace snayai {
                 bool tick(snayai::snake::Snake &snake);
                 void update(snayai::snake::Snake &snake);
                 bool isFood(int x, int y);
+                std::pair<int, int> getSize();
                 int score;
-                int _ai_training_previous_score;
-                int _ai_training_current_score;
                 sf::Color getTileColor(int i, int j);
         };
     }
