@@ -22,6 +22,7 @@ namespace snayai {
                 int previous_movement = 0;
                 int no_food_for = 0;
                 int counter = 0;
+                double previous_distance;
 
         };
     }

@@ -19,7 +19,8 @@ int main() {
     file.open("snake_ai.pt");
 
     if (file) {
-         torch::load(net, "snake_ai.pt");
+        std::printf("Loading model from file\n");
+        torch::load(net, "snake_ai.pt");
     }
 
     snayai::controller::AI controller;

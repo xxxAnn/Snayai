@@ -46,6 +46,16 @@ std::pair<int, int> snayai::controller::AI::poll(snayai::grid::Grid grid, sf::Re
     auto snake_pos = snake.getHeadPosition();
     auto snake_dir = snake.getDirection();
 
+    double distance = 0.0;
+
+    if (!(food_pos.first == snake_pos.first && food_pos.second == snake_pos.second)) {
+        auto distance_x = std::abs(food_pos.first - snake_pos.first);
+        auto distance_y = std::abs(food_pos.second - snake_pos.second);
+        distance = std::sqrt(distance_x*distance_x + distance_y*distance_y);
+    }
+
+    
+
     auto food_direction = snayai::utils::getRelativeDirection(snake_pos, food_pos);
 
     std::pair<int, int> right_turn;
@@ -94,15 +104,7 @@ std::pair<int, int> snayai::controller::AI::poll(snayai::grid::Grid grid, sf::Re
     int movement = 0;
 
 
-    float sum = result[0]+result[1]+result[2];
-    int total_int = std::max(static_cast<int>(100*sum), 1);
-
-    int ranum = rand();
-
-    int num = (ranum % total_int);
-
-
-    if (result[0] < num  && num < result[0]+result[1]) {
+    if (result[1] > result[0] && result[1] > result[2]) {
         movement = 1;
         if (snake_dir.first == 0) {
             going = std::make_pair(-snake_dir.second, 0);
@@ -111,7 +113,7 @@ std::pair<int, int> snayai::controller::AI::poll(snayai::grid::Grid grid, sf::Re
         }
     }
     
-    if (num > result[0]+result[1]) {
+    if (result[2] > result[0] && result[2] > result[1]) {
         movement = 2;
         // (0, 1) -> (1, 0) 
         // (0, -1) -> (-1, 0) 
@@ -128,29 +130,41 @@ std::pair<int, int> snayai::controller::AI::poll(snayai::grid::Grid grid, sf::Re
 
     float actual[3];
 
-    std::fill_n(actual, 3, 0.0F);
+    std::fill_n(actual, 3, 0.33F);
+
+    if (started) {
+        if (previous_distance < distance) {
+            actual[previous_movement] = actual[previous_movement] - 0.2F;
+            actual[(previous_movement + 1) % 3] = actual[(previous_movement + 1) % 3] + 0.1F;
+            actual[(previous_movement + 2) % 3] = actual[(previous_movement + 2) % 3] + 0.1F;
+        } else if (distance < previous_distance) {
+            actual[previous_movement] = actual[previous_movement] + 0.2F;
+            actual[(previous_movement + 1) % 3] = actual[(previous_movement + 1) % 3] - 0.1F;
+            actual[(previous_movement + 2) % 3] = actual[(previous_movement + 2) % 3] - 0.1F;
+        }
+    }
 
     if (grid.foodHook) {
-        actual[previous_movement] = 5.0F;
+        actual[previous_movement] = actual[previous_movement] + 0.4F;
+        actual[(previous_movement + 1) % 3] = actual[(previous_movement + 1) % 3] - 0.2F;
+        actual[(previous_movement + 2) % 3] = actual[(previous_movement + 2) % 3] - 0.2F;
     }
     if (grid.endingHook) {
-
-
-        actual[previous_movement] = -25.0F;
+        actual[(previous_movement + 1) % 3] = actual[(previous_movement + 1) % 3] + 0.15F;
+        actual[(previous_movement + 2) % 3] = actual[(previous_movement + 2) % 3] + 0.15F;
+        actual[previous_movement] = actual[previous_movement] - 0.33F;
     }
+
+
     torch::Tensor target = torch::from_blob(actual, {3});
 
     if (grid.endingHook || grid.foodHook || true) {
         if (started) {
-            //std::printf("Training: \n");
-            //std::cout << target << std::endl;
-            //std::cout << prev_input << std::endl;
-            //std::cout << net->forward(prev_input) << std::endl;
-            //std::printf("\n");
-            if (++counter % 10 == 0) {
-                std::printf("Saving model\n");
-                torch::save(net, "snake_ai.pt");
-            }
+            std::printf("Training: \n");
+            std::cout << target << std::endl;
+            std::cout << net->forward(prev_input) << std::endl;
+            std::printf("\n");
+
             net->train(target, prev_input);
         } else {
             //std::printf("started");
@@ -158,8 +172,16 @@ std::pair<int, int> snayai::controller::AI::poll(snayai::grid::Grid grid, sf::Re
         }
     }
 
+    if (started) {
+        if (++counter % 50 == 0) {
+            std::printf("Saving model\n");
+            torch::save(net, "snake_ai.pt");
+        }
+    }
+
     prev_input = input;
     previous_movement = movement;
+    previous_distance = distance;
 
     return going;
 }
