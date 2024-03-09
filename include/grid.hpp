@@ -8,6 +8,8 @@ namespace snayai {
                 static const int width = snayai::constants::WINDOW_WIDTH/(snayai::constants::TILE_SIZE + snayai::constants::TILE_PADDING_SIZE) + 1;
                 static const int height = snayai::constants::WINDOW_HEIGHT/(snayai::constants::TILE_SIZE + snayai::constants::TILE_PADDING_SIZE) + 1;
                 bool ended = false;
+                bool endingHook = false;
+                bool foodHook = false;
                 
             private:
                 std::vector<std::pair<int, int>> foods;   
@@ -18,6 +20,7 @@ namespace snayai {
 
             public:
                 Grid();
+                std::pair<int, int> getFood();
                 int getTile(int i, int j);
                 void setTile(int i, int j, int value);
                 bool checkCollision(std::pair<int, int> &head);

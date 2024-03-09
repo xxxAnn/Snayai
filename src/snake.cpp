@@ -24,6 +24,10 @@ bool snayai::snake::Snake::move(int width, int height) {
     }
 }
 
+std::pair<int, int> snayai::snake::Snake::getDirection() {
+    return std::make_pair(direction[0], direction[1]);
+}
+
 std::pair<int, int> snayai::snake::Snake::getHeadPosition() {
     return blocks.back();
 }

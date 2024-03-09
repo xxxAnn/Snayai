@@ -4,6 +4,7 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
+#include <torch/torch.h>
 #include <vector>
 #include <cstdio>
 #include <cstdlib>
@@ -16,6 +17,7 @@
 #include "snake.hpp"
 #include "const.hpp"
 #include "grid.hpp"
+#include "net.hpp"
 #include "controller.hpp"
 #include "utils.hpp"
 

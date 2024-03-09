@@ -12,7 +12,8 @@ snayai::grid::Grid::Grid() {
     delay *= CLOCKS_PER_SEC;
 
     addNewFood();
-    score = 0;};
+    score = 0;
+};
 
 void snayai::grid::Grid::reset() {
     for (int i = 0; i < width; i++) {
@@ -20,6 +21,10 @@ void snayai::grid::Grid::reset() {
             setTile(i, j, 0);
         }
     }
+}
+
+std::pair<int, int> snayai::grid::Grid::getFood() {
+    return foods[0];
 }
 
 void snayai::grid::Grid::addNewFood() {
@@ -53,6 +58,7 @@ bool snayai::grid::Grid::tick(snayai::snake::Snake &snake) {
         now = clock();
         reset();
         ended = snake.move(width, height);
+        if (ended) { endingHook = true; }
         auto snake_head = snake.getHeadPosition();
         if (checkCollision(snake_head)) {
             snake.addNewBlock();
@@ -81,6 +87,7 @@ bool snayai::grid::Grid::checkCollision(std::pair<int, int> &head) {
 
         if (food.first == head.first && food.second == head.second) {
             foods.erase(foods.begin()+i);
+            foodHook = true;
             return true;
         }
 

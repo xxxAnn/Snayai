@@ -7,26 +7,41 @@ int main() {
     );
 
     snayai::grid::Grid myGrid;
-    snayai::snake::Snake mySnake(1, 1);
+    snayai::snake::Snake mySnake(5, 5);
+    std::shared_ptr<snayai::net::Net> net = std::make_shared<snayai::net::Net>(std::make_pair(16, 21));
 
-    snayai::controller::Controller controller = snayai::controller::Player();
+    // this if is for loading the model
+    // if the model is not found, it will be created
+    // if the model is found, it will be loaded
 
+    std::ifstream file;
+
+    file.open("snake_ai.pt");
+
+    if (file) {
+         torch::load(net, "snake_ai.pt");
+    }
+
+    snayai::controller::AI controller;
     myGrid.update(mySnake);
 
     while (window.isOpen()) {
-        
-        std::pair<int, int> direction = controller.poll(myGrid, window);
-        if (direction.first != 0 || direction.second != 0) {
-            mySnake.setDirection(direction.first, direction.second);
-        }
-
-        window.clear(sf::Color::Black);
 
         if (myGrid.tick(mySnake)) {
+            
+            std::pair<int, int> direction = controller.poll(myGrid, window, net, mySnake);
+            myGrid.endingHook = false;
+            myGrid.foodHook = false;
+            if (direction.first != 0 || direction.second != 0) {
+                mySnake.setDirection(direction.first, direction.second);
+            }
+
+            window.clear(sf::Color::Black);
 
             if (myGrid.ended) {
                 myGrid = snayai::grid::Grid();
-                mySnake = snayai::snake::Snake(1, 1);
+                myGrid.endingHook = true;
+                mySnake = snayai::snake::Snake(5, 5);
                 myGrid.update(mySnake);
             }
         }
